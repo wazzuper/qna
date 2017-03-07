@@ -78,7 +78,7 @@ RSpec.describe QuestionsController, type: :controller do
     #Если атрибуты не валидные
     context 'with invalid attributes' do
       it 'does not save the question' do
-        #Мы ожидаем, что код выполненный в блоке изменит Question.count на 1 единицу
+        #Мы ожидаем, что код выполненный в блоке не изменит Question.count
         expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
       end
 

@@ -12,6 +12,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it "render question" do
+        #Отображаем вопрос с нашим ответом
         post :create, params: { answer: attributes_for(:answer), question_id: question }
         expect(response).to redirect_to question_path(assigns(:question))
       end
