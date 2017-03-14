@@ -5,6 +5,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:answer) { create(:answer, question_id: question.id) }
 
   describe 'POST #create' do
+    sign_in_user
     context 'with valid attributes' do
       it 'saves the new question in the database' do
         #Мы ожидаем, что код выполненный в блоке изменит question.answers на 1 единицу
