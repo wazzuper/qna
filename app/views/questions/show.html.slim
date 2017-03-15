@@ -1,15 +1,19 @@
-p = @question.title
+h2 = @question.title
 
 p = @question.body
 
-h2 Answers
+h3 Answers
 
 - @question.answers.each do |answer|
   p
     strong Answer: 
     = answer.body
+  - if user_signed_in? && current_user.author_of?(answer)
+      p
+        = link_to 'Delete', answer, method: :delete
 
 = form_for([@question, @question.answers.build]) do |f|
+  = render 'common/errors', resource: @answer
   p = f.label :body
   p = f.text_area :body
   p = f.submit 'Give an answer'
