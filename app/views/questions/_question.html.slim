@@ -1,3 +1,5 @@
 tr
   td
-    = link_to question.title, question
+    p = link_to question.title, question
+    - if user_signed_in? && current_user.author_of?(question)
+      = link_to 'Delete', question, method: :delete

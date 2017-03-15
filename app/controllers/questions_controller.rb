@@ -7,6 +7,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    @answer = @question.answers.new
   end
 
   def new
@@ -15,9 +16,10 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.create(question_params)
+    @question.user = current_user
 
     if @question.save
-      redirect_to @question, notice: 'Your question is successfully created.'
+      redirect_to @question, notice: 'Your question successfully created.'
     else
       render :new
     end
@@ -35,8 +37,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    if current_user.author_of?(@question)
+      @question.destroy
+      flash[:notice] = 'Your question successfully deleted.'
+    else
+      flash[:notice] = 'You can\'t delete foreign question.'
+    end
+
+    redirect_to root_path
   end
 
   private

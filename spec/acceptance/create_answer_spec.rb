@@ -7,22 +7,35 @@ feature 'Create answer', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given(:question) { create(:question, user: user) }
 
-  scenario 'Authenticated user create answer' do
+  scenario 'Authenticated user creates answer' do
     sign_in(user)
+    question
 
-    visit questions_path(question)
-    click_on 'MyString'
+    visit question_path(question)
     fill_in 'Body', with: 'Interesting answer'
     click_on 'Give an answer'
 
+    expect(page).to have_content 'Your answer successfully created.'
     expect(page).to have_content 'Interesting answer'
   end
 
+  scenario 'Authenticated user creates empty answer' do
+    sign_in(user)
+    question
+
+    visit question_path(question)
+    fill_in 'Body', with: ''
+    click_on 'Give an answer'
+
+    expect(page).to have_content 'Body can\'t be blank'
+  end
+
   scenario 'Non-authenticated user trying to create answer' do
-    visit questions_path(question)
-    click_on 'MyString'
+    question
+
+    visit question_path(question)
     fill_in 'Body', with: 'Interesting answer'
     click_on 'Give an answer'
 

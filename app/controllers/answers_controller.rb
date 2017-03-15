@@ -1,10 +1,31 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create]
+  before_action :authenticate_user!
   before_action :set_question, only: [:create]
 
   def create
     @answer = @question.answers.new(answer_params)
-    redirect_to @question if @answer.save
+    @answer.user = current_user
+
+    if @answer.save
+      flash[:notice] = 'Your answer successfully created.'
+      redirect_to @question
+    else
+      render 'questions/show'
+    end
+  end
+
+  def destroy
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
+
+    if current_user.author_of?(@answer)
+      @answer.destroy
+      flash[:notice] = 'Your answer successfully deleted.'
+    else
+      flash[:notice] = 'You can\'t delete foreign answer.'
+    end
+    
+    redirect_to @question
   end
 
   private

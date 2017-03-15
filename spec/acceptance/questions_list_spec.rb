@@ -7,17 +7,27 @@ feature 'List of questions', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:questions) { create_list(:question, 5, user: user) }
 
   scenario 'Authenticated user looks list of questions' do
     sign_in(user)
+    questions
 
-    expect(current_path).to eq root_path
+    visit questions_path
+
+    questions.each do |q|
+      expect(page).to have_content q.title
+    end
   end
 
   scenario 'Non-authenticated user looks list of questions' do
-    visit root_path
+    questions
 
-    expect(current_path).to eq root_path
+    visit questions_path
+
+    questions.each do |q|
+      expect(page).to have_content q.title
+    end
   end
 
 end
