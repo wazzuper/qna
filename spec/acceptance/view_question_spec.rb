@@ -7,13 +7,11 @@ feature 'View question and answers', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, user: user) }
-  given(:answers) { create_list(:answer, 2, question: question, user: user) }
+  given!(:question) { create(:question, user: user) }
+  given!(:answers) { create_list(:answer, 2, question: question, user: user) }
 
   scenario 'Authenticated user watch question' do
     sign_in(user)
-    question
-    answers
 
     visit question_path(question)
 
@@ -25,8 +23,6 @@ feature 'View question and answers', %q{
   end
 
   scenario 'Non-authenticated user watch question' do
-    question
-    answers
 
     visit question_path(question)
 

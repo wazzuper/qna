@@ -7,11 +7,10 @@ feature 'List of questions', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:questions) { create_list(:question, 5, user: user) }
+  given!(:questions) { create_list(:question, 5, user: user) }
 
   scenario 'Authenticated user looks list of questions' do
     sign_in(user)
-    questions
 
     visit questions_path
 
@@ -21,8 +20,6 @@ feature 'List of questions', %q{
   end
 
   scenario 'Non-authenticated user looks list of questions' do
-    questions
-
     visit questions_path
 
     questions.each do |q|

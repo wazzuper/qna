@@ -8,11 +8,10 @@ feature 'Delete question', %q{
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
-  given(:question) { create(:question, user: user) }
+  given!(:question) { create(:question, user: user) }
 
   scenario 'Authenticated user can delete his question' do
     sign_in(user)
-    question
 
     visit questions_path
     click_on 'Delete'
@@ -22,7 +21,6 @@ feature 'Delete question', %q{
   end
 
   scenario 'Authenticated user can\'t delete foreign answer' do
-    question
     sign_in(user2)
 
     visit questions_path
@@ -31,8 +29,6 @@ feature 'Delete question', %q{
   end
 
   scenario 'Non-authenticated user can\'t delete question' do
-    question
-
     visit questions_path
 
     expect(page).to_not have_link 'Delete'
