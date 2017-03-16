@@ -7,11 +7,10 @@ feature 'Create answer', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, user: user) }
+  given!(:question) { create(:question, user: user) }
 
   scenario 'Authenticated user creates answer' do
     sign_in(user)
-    question
 
     visit question_path(question)
     fill_in 'Body', with: 'Interesting answer'
@@ -23,7 +22,6 @@ feature 'Create answer', %q{
 
   scenario 'Authenticated user creates empty answer' do
     sign_in(user)
-    question
 
     visit question_path(question)
     fill_in 'Body', with: ''
@@ -33,8 +31,6 @@ feature 'Create answer', %q{
   end
 
   scenario 'Non-authenticated user trying to create answer' do
-    question
-
     visit question_path(question)
     fill_in 'Body', with: 'Interesting answer'
     click_on 'Give an answer'
