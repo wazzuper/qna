@@ -11,18 +11,18 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
       it 'saves the new question in the database' do
         #Мы ожидаем, что код выполненный в блоке изменит question.answers на 1 единицу
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js } }.to change(question.answers, :count).by(1)
       end
 
-      it "render question" do
+      it "render create template" do
         #Отображаем вопрос с нашим ответом
-        post :create, params: { answer: attributes_for(:answer), question_id: question }
-        expect(response).to redirect_to question_path(assigns(:question))
+        post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
+        expect(response).to render_template :create
       end
 
       it 'this answer belongs to user' do
         #Сверяем answer.user и current_user
-        post :create, params: { answer: attributes_for(:answer), question_id: question }
+        post :create, params: { answer: attributes_for(:answer), question_id: question, format: :js }
         expect(assigns(:answer).user_id).to eq @user.id
       end
     end

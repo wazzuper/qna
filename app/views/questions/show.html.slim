@@ -4,15 +4,10 @@ p = @question.body
 
 h3 Answers
 
-- @question.answers.each do |answer|
-  p
-    strong Answer: 
-    = answer.body
-  - if user_signed_in? && current_user.author_of?(answer)
-      p
-        = link_to 'Delete', answer, method: :delete
+.answers
+  =render @question.answers
 
-= form_for([@question, @question.answers.build]) do |f|
+= form_for([@question, @question.answers.build], remote: true) do |f|
   = render 'common/errors', resource: @answer
   p = f.label :body
   p = f.text_area :body
