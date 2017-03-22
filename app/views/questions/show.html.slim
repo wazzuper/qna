@@ -7,7 +7,7 @@ h3 Answers
 .answers
   =render @question.answers
 
-= form_for([@question, @question.answers.build], remote: true) do |f|
+= form_for [@question, @question.answers.build], remote: true do |f|
   = render 'common/errors', resource: @answer
   p = f.label :body
   p = f.text_area :body
