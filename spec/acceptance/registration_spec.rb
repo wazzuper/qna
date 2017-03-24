@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Users registration', %q{
   In order to be able use this site for ask questions and so on

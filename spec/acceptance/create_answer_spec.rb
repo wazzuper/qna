@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Create answer', %q{
   In order to give an answer
@@ -23,7 +23,6 @@ feature 'Create answer', %q{
     sign_in(user)
 
     visit question_path(question)
-    fill_in 'Body', with: ''
     click_on 'Give an answer'
 
     expect(page).to have_content 'Body can\'t be blank'
