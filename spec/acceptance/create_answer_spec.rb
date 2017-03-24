@@ -13,8 +13,9 @@ feature 'Create answer', %q{
     sign_in(user)
 
     visit question_path(question)
-    fill_in 'Body', with: 'Interesting answer'
+    fill_in 'Answer', with: 'Interesting answer'
     click_on 'Give an answer'
+    sleep(1)
 
     expect(page).to have_content 'Interesting answer'
   end
@@ -24,13 +25,14 @@ feature 'Create answer', %q{
 
     visit question_path(question)
     click_on 'Give an answer'
+    sleep(1)
 
     expect(page).to have_content 'Body can\'t be blank'
   end
 
   scenario 'Non-authenticated user trying to create answer' do
     visit question_path(question)
-    fill_in 'Body', with: 'Interesting answer'
+    fill_in 'Answer', with: 'Interesting answer'
     click_on 'Give an answer'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
