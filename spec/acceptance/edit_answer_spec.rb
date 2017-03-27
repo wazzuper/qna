@@ -3,7 +3,7 @@ require_relative 'acceptance_helper'
 feature 'Edit answer', %q{
   In order to fix answer
   As an author of the answer
-  I want to be able to eidt my answer
+  I want to be able to edit my answer
 } do
 
   given(:user) { create(:user) }
