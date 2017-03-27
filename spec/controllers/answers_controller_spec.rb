@@ -35,28 +35,39 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
+       
+    context 'true author' do
+      sign_in_user
 
-    it 'assigns the requested answer to @answer' do
-      patch :update, params: { id: answer, question: question, answer: attributes_for(:answer), format: :js }
-      expect(assigns(:answer)).to eq(answer)
+      it 'assigns the requested answer to @answer' do
+        patch :update, params: { id: answer, question: question, answer: attributes_for(:answer), format: :js }
+        expect(assigns(:answer)).to eq(answer)
+      end
+
+      it 'assigns the question' do
+        patch :update, params: { id: answer, question: question, answer: attributes_for(:answer), format: :js }
+        expect(assigns(:question)).to eq(question)
+      end
+
+      it 'changes answer attributes' do
+        patch :update, params: { id: answer, question: question, answer: { body: 'new body' }, format: :js }
+        answer.reload
+        expect(answer.body).to eq('new body')
+      end
+
+      it 'render update template' do
+        patch :update, params: { id: answer, question: question, answer: attributes_for(:answer), format: :js }
+        expect(response).to render_template :update
+      end
     end
 
-    it 'assigns the question' do
-      patch :update, params: { id: answer, question: question, answer: attributes_for(:answer), format: :js }
-      expect(assigns(:question)).to eq(question)
-    end
+    context 'another author' do
 
-
-    it 'changes answer attributes' do
-      patch :update, params: { id: answer, question: question, answer: { body: 'new body' }, format: :js }
-      answer.reload
-      expect(answer.body).to eq('new body')
-    end
-
-    it 'render update template' do
-      patch :update, params: { id: answer, question: question, answer: attributes_for(:answer), format: :js }
-      expect(response).to render_template :update
+      it 'trying to delete foreign answer' do
+        sign_in user2
+        patch :update, params: { id: answer, question: question, answer: { body: "new body" } , format: :js }
+        expect(answer.body).to_not eq "new body"
+      end
     end
   end
 
@@ -69,7 +80,6 @@ RSpec.describe AnswersController, type: :controller do
 
     it 'delete answer by another author' do
       sign_in user2
-      answer
       expect { delete :destroy, params: { id: answer} }.to_not change(Answer, :count)
     end
 

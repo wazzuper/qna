@@ -7,8 +7,11 @@ feature 'Edit answer', %q{
 } do
 
   given(:user) { create(:user) }
+  given(:user2) { create(:user) }
   given!(:question) { create(:question, user: user) }
+  given(:question2) { create(:question, user: user2) }
   given(:answer) { create(:answer, question: question, user: user) }
+  given(:answer2) { create(:answer, question: question2, user: user2) }
 
   scenario 'Non-authenticated trying to edit answer' do
     visit question_path(question)
@@ -42,7 +45,13 @@ feature 'Edit answer', %q{
       end
     end
 
-    scenario 'trying to edit other users answer'
+    scenario 'can\'t edit other users answers' do
+      question2
+      answer2
+      visit question_path(question2)
+
+      expect(page).to_not have_link 'Edit'
+    end
   end
 
 end
