@@ -12,26 +12,26 @@ feature 'Delete question', %q{
 
   scenario 'Authenticated user can delete his question' do
     sign_in(user)
+    visit question_path(question)
 
-    visit questions_path
-    click_on 'Delete'
+    click_on 'Delete this answer'
 
     expect(page).to have_content 'Your question successfully deleted.'
+    expect(current_path).to eq root_path
     expect(page).to_not have_content question.title
   end
 
   scenario 'Authenticated user can\'t delete foreign answer' do
     sign_in(user2)
+    visit question_path(question)
 
-    visit questions_path
-
-    expect(page).to_not have_link 'Delete'
+    expect(page).to_not have_link 'Delete this answer'
   end
 
   scenario 'Non-authenticated user can\'t delete question' do
-    visit questions_path
+    visit question_path(question)
 
-    expect(page).to_not have_link 'Delete'
+    expect(page).to_not have_link 'Delete this answer'
   end
 
 end
