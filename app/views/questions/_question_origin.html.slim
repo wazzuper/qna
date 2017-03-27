@@ -1,0 +1,19 @@
+h2 = @question.title
+
+p = @question.body
+
+- if user_signed_in? && current_user.author_of?(@question)
+  = link_to 'Edit my question', '', class: 'edit-question-link', data: { question_id: @question.id }
+  p
+    = form_for @question, remote: true, html: { id: "edit-question-#{@question.id}" } do |f|
+      p 
+        = f.label :title
+        = f.text_field :title
+      p
+        = f.label :body
+        = f.text_area :body
+      .question-errors
+      = f.submit 'Save'
+    end
+
+  = link_to 'Delete this question', @question, method: :delete

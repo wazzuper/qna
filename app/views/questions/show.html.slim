@@ -1,22 +1,5 @@
 .question
-  h2 = @question.title
-
-  p = @question.body
-
-  - if user_signed_in? && current_user.author_of?(@question)
-    = link_to 'Edit my question'
-    p
-      = form_for @question, remote: true do |f|
-        p 
-          = f.label :title
-          = f.text_field :title
-        p
-          = f.label :body
-          = f.text_area :body
-        = f.submit 'Save'
-      end
-
-    = link_to 'Delete this question', @question, method: :delete
+  =render 'question_origin'
 
 h3 Answers
 
