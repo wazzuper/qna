@@ -1,9 +1,22 @@
-h2 = @question.title
+.question
+  h2 = @question.title
 
-p = @question.body
+  p = @question.body
 
-- if user_signed_in? && current_user.author_of?(@question)
-  = link_to 'Delete this question', @question, method: :delete
+  - if user_signed_in? && current_user.author_of?(@question)
+    = link_to 'Edit my question'
+    p
+      = form_for @question, remote: true do |f|
+        p 
+          = f.label :title
+          = f.text_field :title
+        p
+          = f.label :body
+          = f.text_area :body
+        = f.submit 'Save'
+      end
+
+    = link_to 'Delete this question', @question, method: :delete
 
 h3 Answers
 
@@ -12,7 +25,7 @@ h3 Answers
 
 = form_for [@question, @question.answers.build], remote: true do |f|
   p = f.label :body, 'Answer'
-  .answer-errors
+  .answer-errors-new
   p = f.text_area :body
   p = f.submit 'Give an answer'
 

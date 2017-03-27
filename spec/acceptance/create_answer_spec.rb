@@ -27,7 +27,9 @@ feature 'Create answer', %q{
     click_on 'Give an answer'
     sleep(1)
 
-    expect(page).to have_content 'Body can\'t be blank'
+    within '.answer-errors-new' do
+      expect(page).to have_content 'Body can\'t be blank'
+    end
   end
 
   scenario 'Non-authenticated user trying to create answer' do

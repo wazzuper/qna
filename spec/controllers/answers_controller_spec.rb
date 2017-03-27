@@ -4,7 +4,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:user){ create(:user) }
   let(:user2){ create(:user) }
   let!(:question) { create(:question, user: user) }
-  let!(:answer) { create(:answer, question_id: question.id, user: user) }
+  let!(:answer) { create(:answer, question: question, user: user) }
 
   describe 'POST #create' do
     sign_in_user
@@ -50,6 +50,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'changes answer attributes' do
+        sign_in user
         patch :update, params: { id: answer, question: question, answer: { body: 'new body' }, format: :js }
         answer.reload
         expect(answer.body).to eq('new body')
@@ -63,7 +64,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'another author' do
 
-      it 'trying to delete foreign answer' do
+      it 'trying to edit foreign answer' do
         sign_in user2
         patch :update, params: { id: answer, question: question, answer: { body: "new body" } , format: :js }
         expect(answer.body).to_not eq "new body"
