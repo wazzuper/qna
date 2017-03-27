@@ -157,7 +157,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'another author' do
-      it 'delete answer by another author' do
+      it 'delete question by another author' do
         sign_in user2
         question
         expect { delete :destroy, params: { id: question} }.to_not change(Question, :count)
