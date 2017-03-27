@@ -6,6 +6,7 @@
     p
       = form_for answer, remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
         = f.label :body, 'Answer'
+        .answer-errors
         = f.text_area :body
         = f.submit 'Save'
       end
