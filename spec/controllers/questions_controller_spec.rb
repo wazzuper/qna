@@ -104,38 +104,37 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
-    context 'valid attributes' do
+
+    context 'true author' do
+      sign_in_user
+
       it 'assigns the requested question to @question' do
         #Сравниваем переменную question с созданным question
-        patch :update, params: { id: question, question: attributes_for(:question) }
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
         expect(assigns(:question)).to eq(question)
       end
 
       it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' } }
+        sign_in user
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' }, format: :js }
         question.reload
         expect(question.title).to eq('new title')
         expect(question.body).to eq('new body')
       end
 
-      it 'redirects to the updated question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(response).to redirect_to question
+      it 'render update template' do
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+        expect(response).to render_template :update
       end
     end
 
-    context 'invalid attributes' do
-      before { patch :update, params: { id: question, question: { title: 'new title', body: nil } } }
+    context 'another author' do
 
-      it 'does not change question attributes' do
-        question.reload
-        expect(question.title).to eq question.title
-        expect(question.body).to eq question.body
-      end
-
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
+      it 'trying to edit foreign question' do
+        sign_in user2
+        patch :update, params: { id: question, question: { title: 'new title', body: 'new body' }, format: :js }
+        expect(question.title).to_not eq('new title')
+        expect(question.body).to_not eq('new body')
       end
     end
   end
