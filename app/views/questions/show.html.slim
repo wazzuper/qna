@@ -4,7 +4,7 @@
 h3 Answers
 
 .answers
-  =render @question.answers
+  =render @question.answers.ordered
 
 = form_for [@question, @question.answers.build], remote: true do |f|
   p = f.label :body, 'Answer'

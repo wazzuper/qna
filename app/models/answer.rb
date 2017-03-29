@@ -4,6 +4,8 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  scope :ordered, -> { order('best DESC') }
+
   def set_best
     Answer.transaction do
       old_answer = self.question.answers.find_by(best: true)

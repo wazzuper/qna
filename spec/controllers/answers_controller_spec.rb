@@ -92,22 +92,34 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #set_best' do
-    it 'true author set the best question' do
-      sign_in user
-      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
-      expect(answer.reload).to be_best
+
+    context 'authenticated user' do
+
+      it 'true author set the best question' do
+        sign_in user
+        patch :set_best, params: { id: answer, question: question, answer: attributes_for(:answer) }, format: :js
+        expect(answer.reload).to be_best
+      end
+
+      it 'another author trying to set the best question' do
+        sign_in user2
+        patch :set_best, params: { id: answer, question: question, answer: attributes_for(:answer) }, format: :js
+        expect(answer.reload).to_not be_best
+      end
+
+      it 'render set_best template' do
+        sign_in user
+        patch :set_best, params: { id: answer, question: question, answer: attributes_for(:answer) }, format: :js
+        expect(response).to render_template :set_best
+      end
     end
 
-    it 'another author trying to set the best question' do
-      sign_in user2
-      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
-      expect(answer.reload).to_not be_best
-    end
+    context 'non-authenticated user' do
 
-    it 'render set_best template' do
-      sign_in user
-      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
-      expect(response).to render_template :set_best
+      it 'can\'t set the best answer' do
+        patch :set_best, params: { id: answer, question: question, answer: attributes_for(:answer) }, format: :js
+        expect(answer.reload.best).not_to eql(true)
+      end
     end
   end
 end
