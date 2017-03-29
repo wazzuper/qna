@@ -13,11 +13,33 @@ feature 'Set best answer', %q{
 
   describe 'Authenticated user' do
 
+    scenario 'can see link to set the best answer' do
+      sign_in(user)
+      visit question_path(question)
+
+      within '.answers' do
+        expect(page).to have_link 'Best answer!'
+      end
+    end
+
     scenario 'can set the best answer of his question'
 
-    scenario 'can\'t set the best answer in foreign question'
+    scenario 'can\'t set the best answer in foreign question' do
+      sign_in(user2)
+      visit question_path(question)
+
+      within '.answers' do
+        expect(page).to_not have_link 'Best answer!'
+      end
+    end
   end
 
-  scenario 'Non-authenticated user can\'t choose the best answer'
+  scenario 'Non-authenticated user can\'t choose the best answer' do
+    visit question_path(question)
+
+    within '.answers' do
+      expect(page).to_not have_link 'Best answer!'
+    end
+  end
 
 end
