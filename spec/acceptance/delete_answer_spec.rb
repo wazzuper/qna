@@ -11,13 +11,12 @@ feature 'Delete answer', %q{
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
 
-  scenario 'Authenticated user can delete his answer' do
+  scenario 'Authenticated user can delete his answer', js: true do
     sign_in(user)
 
     visit question_path(question)
     click_on 'Delete'
 
-    expect(page).to have_content 'Your answer successfully deleted.'
     expect(page).to_not have_content answer.body
   end
 
