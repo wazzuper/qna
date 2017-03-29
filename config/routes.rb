@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :answers
   resources :questions do
-    resources :answers, only: [:create, :update] do
+    resources :answers, only: [:create, :update], shallow: true do
       patch 'set_best', on: :member
     end
   end
