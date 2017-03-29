@@ -13,6 +13,6 @@ RSpec.describe Answer, type: :model do
   it 'answer best is true' do
     answer.set_best
 
-    expect(answer).to be_best
+    expect(answer.best).to eql(true)
   end
 end

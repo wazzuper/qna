@@ -13,5 +13,5 @@
           = f.text_area :body
           = f.submit 'Save'
         end
-      p = link_to 'Best answer!', set_best_answer_path(answer), method: :patch
+      p = link_to 'Best answer!', set_best_answer_path(answer), method: :patch, remote: true
       p = link_to 'Delete', answer, method: :delete, remote: true

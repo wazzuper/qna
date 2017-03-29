@@ -94,20 +94,20 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #set_best' do
     it 'true author set the best question' do
       sign_in user
-      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }
+      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
       expect(answer.reload).to be_best
     end
 
     it 'another author trying to set the best question' do
       sign_in user2
-      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }
+      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
       expect(answer.reload).to_not be_best
     end
 
-    it 'render question view' do
+    it 'render set_best template' do
       sign_in user
-      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }
-      expect(response).to redirect_to question
+      patch :set_best, params: { id: answer, question_id: question, answer: attributes_for(:answer) }, format: :js
+      expect(response).to render_template :set_best
     end
   end
 end

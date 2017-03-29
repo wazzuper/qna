@@ -22,8 +22,6 @@ class AnswersController < ApplicationController
   def set_best
     @question = @answer.question
     @answer.set_best if current_user.author_of?(@answer)
-
-    redirect_to @question
   end
 
   private
