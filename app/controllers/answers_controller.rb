@@ -6,28 +6,17 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params)
     @answer.user = current_user
-    flash[:notice] = 'Your answer successfully created.' if @answer.save
+    @answer.save
   end
 
   def update
     @question = @answer.question
-
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-    end
+    @answer.update(answer_params) if current_user.author_of?(@answer)
   end
 
   def destroy
     @question = @answer.question
-
-    if current_user.author_of?(@answer)
-      @answer.destroy
-      flash[:notice] = 'Your answer successfully deleted.'
-    else
-      flash[:notice] = 'You can\'t delete foreign answer.'
-    end
-    
-    redirect_to @question
+    @answer.destroy if current_user.author_of?(@answer)
   end
 
   private

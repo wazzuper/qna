@@ -66,7 +66,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'trying to edit foreign answer' do
         sign_in user2
-        patch :update, params: { id: answer, question: question, answer: { body: "new body" } , format: :js }
+        patch :update, params: { id: answer, question: question, answer: { body: "new body" }, format: :js }
         expect(answer.body).to_not eq "new body"
       end
     end
@@ -76,18 +76,18 @@ RSpec.describe AnswersController, type: :controller do
     it 'true author delete his answer' do
       sign_in user
       answer
-      expect { delete :destroy, params: { id: answer} }.to change(Answer, :count).by(-1)
+      expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
     end
 
     it 'delete answer by another author' do
       sign_in user2
-      expect { delete :destroy, params: { id: answer} }.to_not change(Answer, :count)
+      expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
     end
 
     it 'redirect to questions' do
       sign_in user
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to question_path(question)
+      delete :destroy, params: { id: answer }, format: :js
+      expect(response).to render_template :destroy
     end
   end
 end
