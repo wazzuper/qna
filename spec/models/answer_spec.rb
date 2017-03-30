@@ -15,7 +15,7 @@ RSpec.describe Answer, type: :model do
       answer
       answer.set_best
 
-      expect(answer.best).to eql(true)
+      expect(answer).to be_best
     end
 
     it 'only one answer is the best' do
