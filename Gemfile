@@ -34,6 +34,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'slim-rails'
 gem 'rails-controller-testing'
 gem 'devise'
+gem 'twitter-bootstrap-rails'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
