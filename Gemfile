@@ -36,6 +36,7 @@ gem 'rails-controller-testing'
 gem 'devise'
 gem 'twitter-bootstrap-rails'
 gem 'carrierwave'
+gem 'remotipart'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
