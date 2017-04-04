@@ -11,10 +11,8 @@ h3 Answers
   .answer-errors-new
   p = f.text_area :body
   p Attachments:
-  p
-    = f.fields_for :attachments, @answer.attachments.build do |a|
-      = a.label :file
-      = a.file_field :file
+  .attachments-answer
+    = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/attachment_fields'
   p = f.submit 'Give an answer'
 
 = link_to 'Back', questions_path
