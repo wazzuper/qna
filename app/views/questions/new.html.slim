@@ -9,10 +9,9 @@
   p
     = f.text_area :body
   p Attachments:
-  p
-    = f.fields_for :attachments do |a|
-      = a.label :file
-      = a.file_field :file
+  .attachments
+    / link_to_add_association - хелпер cocoon
+    = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/attachment_fields'
   = f.submit 'Create'
 p
   = link_to 'Back', questions_path
