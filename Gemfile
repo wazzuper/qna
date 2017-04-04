@@ -37,6 +37,7 @@ gem 'devise'
 gem 'twitter-bootstrap-rails'
 gem 'carrierwave'
 gem 'remotipart'
+gem 'cocoon'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
