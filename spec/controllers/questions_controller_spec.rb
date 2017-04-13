@@ -5,6 +5,29 @@ RSpec.describe QuestionsController, type: :controller do
   let(:user2){ create(:user) }
   let(:question) { create(:question, user: user) }
 
+  describe 'PATCH #vote' do
+
+    context 'Authenticated user' do
+      sign_in_user
+      
+      it 'question rating +1' do
+        patch :vote_up, params: { id: question, format: :json }
+        expect(question.votes).to eq question.votes(rating: 1)
+      end
+
+      it 'question rating -1' do
+        patch :vote_down, params: { id: question, format: :json }
+        expect(question.votes).to eq question.votes(rating: -1)
+      end
+    end
+
+    context 'Not-authenticated user' do
+      it 'cannot vote for question' do
+        expect{ patch :vote_up, params: { id: question, format: :json } }.not_to change(question.votes, :count)
+      end
+    end
+  end
+
   describe 'GET #index' do
     #С помощью метода let мы выполняем код до тех пор, пока не вызовем его
     #Один раз выполнившись, метод let сохраняет возвращенное значение

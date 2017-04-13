@@ -6,6 +6,29 @@ RSpec.describe AnswersController, type: :controller do
   let!(:question) { create(:question, user: user) }
   let!(:answer) { create(:answer, question: question, user: user) }
 
+  describe 'PATCH #vote' do
+
+    context 'Authenticated user' do
+      sign_in_user
+      
+      it 'answer rating +1' do
+        patch :vote_up, params: { id: answer, format: :json }
+        expect(answer.votes).to eq answer.votes(rating: 1)
+      end
+
+      it 'answer rating -1' do
+        patch :vote_down, params: { id: answer, format: :json }
+        expect(answer.votes).to eq answer.votes(rating: -1)
+      end
+    end
+
+    context 'Not-authenticated user' do
+      it 'can\'t vote for answer' do
+        expect{ patch :vote_up, params: { id: answer, format: :json } }.not_to change(answer.votes, :count)
+      end
+    end
+  end
+
   describe 'POST #create' do
     sign_in_user
     context 'with valid attributes' do

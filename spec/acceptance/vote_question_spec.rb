@@ -11,19 +11,31 @@ feature 'Vote for question', %q{
   given!(:question) { create(:question, user: user) }
 
   describe 'Authenticated user' do
-    scenario 'vote up for question'
 
-    scenario 'vote down for question'
+    scenario 'vote up for other users questions', js: true do
+      sign_in(user2)
+      visit question_path(question)
+
+      within ".rating-question-#{question.id}" do
+        click_on '+'
+
+        expect(page).to have_content 'Rating: 1'
+      end
+
+      #within ".rating-question-#{question.id}" do
+        #click_on '-'
+
+        #expect(page).to have_content 'Rating: 0'
+      #end
+    end
 
     scenario 'author of the question can\'t vote'
-
-    scenario 'vote rejected'
   end
 
   scenario 'Non-authenticated user trying to vote' do
     visit question_path(question)
 
-    expect(page).to_not have_link 'Up'
-    expect(page).to_not have_link 'Down'
+    expect(page).to_not have_link '+'
+    expect(page).to_not have_link '-'
   end
 end
