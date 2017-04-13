@@ -8,6 +8,12 @@
     ul
       = render answer.attachments, attach: answer
 
+    div class="rating-answer-#{answer.id}"
+      p Rating: #{answer.votes_summary}
+      - if user_signed_in?
+        p = link_to '+', vote_up_answer_path(answer), method: :patch, remote: true, data: { type: :json }, class: 'answer-up-link'
+        p = link_to '-', vote_down_answer_path(answer), method: :patch, remote: true, data: { type: :json }, class: 'answer-down-link'
+
     - if user_signed_in? && current_user.author_of?(answer)
       /определяем через data id вопроса
       p = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }

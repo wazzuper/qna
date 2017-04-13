@@ -6,10 +6,19 @@ ready = ->
   $('.edit-question-link').click (e) ->
     e.preventDefault();
     $(this).hide();
-    question_id = $(this).data('questionId')
-    $('form#edit-question-' + question_id).show()
+    question_id = $(this).data('questionId');
+    $('form#edit-question-' + question_id).show();
 
-$(document).ready(ready)
-$(document).on('page:load', ready)
-$(document).on('page:update', ready)
-$(document).on("turbolinks:load", ready)
+  $('.question-up-link').bind 'ajax:success', (e, data, status, xhr) ->
+    vote = $.parseJSON(xhr.responseText);
+    $('.rating-question-' + vote.id).html('Rating: ' + vote.votes_count);
+
+  $('.question-down-link').bind 'ajax:success', (e, data, status, xhr) ->
+    vote = $.parseJSON(xhr.responseText);
+    $('.rating-question-' + vote.id).html('Rating: ' + vote.votes_count);
+
+$(document).on("turbolinks:load", ready);
+$(document).ready(ready);
+$(document).on('page:load', ready);
+$(document).on('page:update', ready);
+$(document).on('page:change', ready);
