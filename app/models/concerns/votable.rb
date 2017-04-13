@@ -13,11 +13,16 @@ module Votable
     self.votes.create(user: user, rating: -1)
   end
 
-  def vote_cancel
+  def vote_cancel(user)
+    self.votes.where(user: user).delete_all
   end
 
   # сумма голосов
   def votes_summary
     votes.sum(:rating)
+  end
+
+  def voted?(user)
+    votes.where(user: user).exists?
   end
 end

@@ -6,16 +6,24 @@ module Voted
   end
 
   def vote_up
-    @votable.vote_up(current_user)
-    render json: { votes_count: @votable.votes_summary, id: @votable.id }
+    if !current_user.author_of?(@votable) && !@votable.voted?(current_user)
+      @votable.vote_up(current_user)
+      render json: { votes_count: @votable.votes_summary, id: @votable.id, type: controller_name.singularize }
+    end
   end
 
   def vote_down
-    @votable.vote_down(current_user)
-    render json: { votes_count: @votable.votes_summary, id: @votable.id }
+    if !current_user.author_of?(@votable) && !@votable.voted?(current_user)
+      @votable.vote_down(current_user)
+      render json: { votes_count: @votable.votes_summary, id: @votable.id,type: controller_name.singularize }
+    end
   end
 
   def vote_cancel
+    if !@votable.votes(current_user).nil?
+      @votable.vote_cancel(current_user)
+      render json: { votes_count: @votable.votes_summary, id: @votable.id, type: controller_name.singularize }
+    end
   end
 
   private

@@ -4,6 +4,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:user){ create(:user) }
   let(:user2){ create(:user) }
   let(:question) { create(:question, user: user) }
+  let(:vote) { { id: question, votes_count: question.votes_summary, type: question.class.name } }
 
   describe 'PATCH #vote' do
 
@@ -19,12 +20,36 @@ RSpec.describe QuestionsController, type: :controller do
         patch :vote_down, params: { id: question, format: :json }
         expect(question.votes).to eq question.votes(rating: -1)
       end
+
+      it 'can\'t vote for own question' do
+        patch :vote_up, params: { id: question, user: user, format: :json }
+        expect(question.votes).to eq question.votes(rating: 0)
+      end
+
+      it 'render template json for succeed status' do
+        patch :vote_up, params: vote, format: :json
+
+        expect(response).to have_http_status :success
+        json = JSON.parse(response.body)
+        expect(json['votes_count']).to eq question.votes_summary
+        expect(json['type']).to eq('question')
+      end
     end
 
     context 'Not-authenticated user' do
+      let(:vote) { { id: question, format: :json } }
       it 'cannot vote for question' do
-        expect{ patch :vote_up, params: { id: question, format: :json } }.not_to change(question.votes, :count)
+        expect { patch :vote_up, params: vote }.not_to change(question.votes, :count)
       end
+    end
+  end
+
+  describe 'PATCH #delete' do
+    sign_in_user
+
+    it 'can cancel own question vote' do
+      delete :vote_cancel, params: { id: question, format: :json }
+      expect(question.votes).to eq question.votes(rating: 0)
     end
   end
 
