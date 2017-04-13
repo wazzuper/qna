@@ -11,23 +11,70 @@ feature 'Vote for answer', %q{
   given!(:question) { create(:question, user: user) }
   given!(:answer) { create(:answer, question: question, user: user) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user2' do
+    before { sign_in(user2) }
 
     scenario 'vote up for other users answers', js: true do
-      sign_in(user2)
       visit question_path(question)
 
-      within ".rating-answer-#{answer.id}" do
+      within ".vote-answer-#{answer.id}" do
+        click_on '+'
+
+        expect(page).to have_content 'Rating: 1'
+      end
+    end
+
+    scenario 'vote down for other users answers', js: true do
+      visit question_path(question)
+
+      within ".vote-answer-#{answer.id}" do
+        click_on '-'
+
+        expect(page).to have_content 'Rating: -1'
+      end
+    end
+
+    scenario 'cancel his vote', js: true do
+      visit question_path(question)
+
+      within ".vote-answer-#{answer.id}" do
         click_on '+'
 
         expect(page).to have_content 'Rating: 1'
       end
 
-      #within ".rating-answer-#{answer.id}" do
-        #click_on '-'
+      within ".vote-answer-#{answer.id}" do
+        click_on 'cancel vote'
 
-        #expect(page).to have_content 'Rating: 0'
-      #end
+        expect(page).to_not have_content 'Rating: 1'
+        expect(page).to have_content 'Rating: 0'
+      end
+    end
+
+    scenario 'can\'t vote twice', js: true do
+      visit question_path(question)
+
+      within ".vote-answer-#{answer.id}" do
+        click_on '+'
+
+        expect(page).to have_content 'Rating: 1'
+      end
+
+      within ".vote-answer-#{answer.id}" do
+        expect(page).not_to have_link '-'
+        expect(page).not_to have_link '+'
+      end
+    end
+  end
+
+  scenario 'Author of the answer can\'t vote' do
+    sign_in(user)
+    visit question_path(question)
+
+    within '.answers' do
+      expect(page).to_not have_link '+'
+      expect(page).to_not have_link '-'
+      expect(page).to_not have_link 'cancel vote'
     end
   end
 

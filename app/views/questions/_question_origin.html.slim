@@ -6,11 +6,7 @@ p Attachments:
 ul
   =render @question.attachments, attach: @question
 
-div class="rating-question-#{@question.id}"
-  p Rating: #{@question.votes_summary}
-  - if user_signed_in?
-    p = link_to '+', vote_up_question_path(@question), method: :patch, remote: true, data: { type: :json }, class: 'question-up-link'
-    p = link_to '-', vote_down_question_path(@question), method: :patch, remote: true, data: { type: :json }, class: 'question-down-link'
+= render 'common/votes', votable: @question
 
 - if user_signed_in? && current_user.author_of?(@question)
   = link_to 'Edit my question', '', class: 'edit-question-link', data: { question_id: @question.id }

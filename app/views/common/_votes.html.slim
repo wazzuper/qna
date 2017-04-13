@@ -1,0 +1,7 @@
+
+div class="vote vote-#{votable.class.name.underscore}-#{votable.id}"
+  span class="rating-#{votable.class.name.underscore}-#{votable.id}" Rating: #{votable.votes_summary}
+  - if user_signed_in? && !current_user.author_of?(votable)
+    = link_to '+', polymorphic_url(votable, action: :vote_up), method: :patch, remote: true, data: { type: :json }, class: "#{!votable.voted?(current_user) ? "vote-up-#{votable.class.name.underscore}-#{votable.id}" : "vote-up-#{votable.class.name.underscore}-#{votable.id}" ' hidden'}"
+    = link_to '-', polymorphic_url(votable, action: :vote_down), method: :patch, remote: true, data: { type: :json }, class: "#{!votable.voted?(current_user) ? "vote-down-#{votable.class.name.underscore}-#{votable.id}" : "vote-down-#{votable.class.name.underscore}-#{votable.id}" ' hidden'}"
+    = link_to ' cancel vote', polymorphic_url(votable, action: :vote_cancel), method: :delete, remote: true, data: { type: :json }, class: "#{votable.voted?(current_user) ? "vote-cancel-#{votable.class.name.underscore}-#{votable.id}" : "vote-cancel-#{votable.class.name.underscore}-#{votable.id}" ' hidden'}"

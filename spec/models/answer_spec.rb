@@ -31,4 +31,37 @@ RSpec.describe Answer, type: :model do
       expect(answer2.reload).to be_best
     end
   end
+
+  describe 'vote' do
+    let(:user) { create(:user) }
+    let(:user2) { create(:user) }
+    let(:user3) { create(:user) }
+    let(:question) { create(:question, user: user) }
+    let(:answer) { create(:answer, question: question, user: user) }
+
+    it '#vote_up' do
+      answer.vote_up(user2)
+      expect(answer.votes_summary).to eq(1)
+    end
+
+    it '#vote_down' do
+      answer.vote_down(user2)
+      expect(answer.votes_summary).to eq (-1)
+    end
+
+    it '#vote_cancel' do
+      answer.vote_cancel(user2)
+      expect(answer.votes_summary).to eq (0)
+    end
+
+    it '#vote_summary' do
+      answer.vote_up(user3)
+      answer.vote_up(user2)
+      expect(answer.votes_summary).to eq(2)
+    end
+    it '#voted?' do
+      answer.vote_up(user2)
+      expect(answer.voted?(user2)).to eq(true)
+    end
+  end
 end
