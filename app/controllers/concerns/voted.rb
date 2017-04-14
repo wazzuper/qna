@@ -20,7 +20,7 @@ module Voted
   end
 
   def vote_cancel
-    if !@votable.votes(current_user).nil?
+    if @votable.voted?(current_user)
       @votable.vote_cancel(current_user)
       render json: { votes_count: @votable.votes_summary, id: @votable.id, type: controller_name.singularize }
     end
